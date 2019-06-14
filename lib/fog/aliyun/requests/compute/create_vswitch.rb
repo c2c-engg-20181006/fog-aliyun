@@ -4,7 +4,7 @@ module Fog
   module Compute
     class Aliyun
       class Real
-        def create_vswitch(vpcId, cidrBlock, options = {})
+        def create_vswitch(cidrBlock, options = {})
           # {Aliyun API Reference}[https://docs.aliyun.com/?spm=5176.100054.3.1.DGkmH7#/pub/ecs/open-api/vswitch&createvswitch]
           action = 'CreateVSwitch'
           sigNonce = randonStr
@@ -12,10 +12,6 @@ module Fog
 
           parameters = defalutParameters(action, sigNonce, time)
           pathUrl = defaultAliyunUri(action, sigNonce, time)
-
-          parameters['VpcId'] = vpcId
-          pathUrl += '&VpcId='
-          pathUrl += vpcId
 
           parameters['CidrBlock'] = cidrBlock
           pathUrl += '&CidrBlock='
