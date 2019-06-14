@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+ 
 module Fog
   module Compute
     class Aliyun
@@ -21,16 +21,18 @@ module Fog
         #
         # {Aliyun API Reference}[https://docs.aliyun.com/?spm=5176.100054.201.106.DGkmH7#/pub/ecs/open-api/disk&createdisk]
         def create_disk(size, options = {})
+        
           action = 'CreateDisk'
           sigNonce = randonStr
           time = Time.new.utc
 
           parameters = defalutParameters(action, sigNonce, time)
           pathUrl = defaultAliyunUri(action, sigNonce, time)
-
-          parameters['ZoneId'] = @aliyun_zone_id
+          
+          #parameters['ZoneId'] = @aliyun_zone_id
+          parameters['ZoneId'] = options[:zone_id]
           pathUrl += '&ZoneId='
-          pathUrl += @aliyun_zone_id
+          pathUrl += options[:zone_id]
 
           parameters['Size'] = size
           pathUrl += '&Size='
@@ -54,11 +56,12 @@ module Fog
 
           if category
             parameters['DiskCategory'] = category
-            pathUrl += 'DiskCategory'
+            pathUrl += '&DiskCategory='
             pathUrl += category
           end
 
-          signature = sign(@aliyun_accesskey_secret, parameters)
+          signature = sign(@aliyun_accesskey_secret, parameters)  
+          
           pathUrl += '&Signature='
           pathUrl += signature
 
@@ -66,7 +69,7 @@ module Fog
             expects: [200, 203],
             method: 'GET',
             path: pathUrl
-          ).merge(options)
+          )
         end
 
         # Create a disk By the snapshot with given snapshot_id.
