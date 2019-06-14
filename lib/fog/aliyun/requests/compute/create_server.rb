@@ -1,26 +1,33 @@
 # frozen_string_literal: true
-
 module Fog
   module Compute
     class Aliyun
       class Real
-        # {Aliyun API Reference}[https://docs.aliyun.com/?spm=5176.100054.3.1.DGkmH7#/pub/ecs/open-api/instance&createinstance]
-        def create_server(imageId, securityGroupId, instanceType, options = {})
+        def create_server(options = {})
           _action = 'CreateInstance'
           _sigNonce = randonStr
           _time = Time.new.utc
 
           _parameters = defalutParameters(_action, _sigNonce, _time)
           _pathURL = defaultAliyunUri(_action, _sigNonce, _time)
+          
+          _ImageId = options[:imageId]
+          if _ImageId
+            _parameters['ImageId'] = _ImageId
+            _pathURL += '&ImageId=' + _ImageId
+          end
+          
+          _InstanceType = options[:instanceType]
+          if _InstanceType
+            _parameters['InstanceType'] = _InstanceType
+            _pathURL += '&InstanceType=' + _InstanceType
+          end
 
-          _parameters['ImageId'] = imageId
-          _pathURL += '&ImageId=' + imageId
-
-          _parameters['InstanceType'] = instanceType
-          _pathURL += '&InstanceType=' + instanceType
-
-          _parameters['SecurityGroupId'] = securityGroupId
-          _pathURL += '&SecurityGroupId=' + securityGroupId
+          _SecurityGroupId = options[:SecurityGroupId]
+          if _SecurityGroupId
+            _parameters['SecurityGroupId'] = _SecurityGroupId
+            _pathURL += '&SecurityGroupId=' + _SecurityGroupId
+          end
 
           _ZoneId = options[:ZoneId]
           if _ZoneId
