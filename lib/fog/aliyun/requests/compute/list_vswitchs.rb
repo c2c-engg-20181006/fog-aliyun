@@ -5,7 +5,7 @@ module Fog
     class Aliyun
       class Real
         # {Aliyun API Reference}[https://docs.aliyun.com/?spm=5176.100054.3.1.DGkmH7#/pub/ecs/open-api/vswitch&describevswitches]
-        def list_vswitchs(vpcid, options = {})
+        def list_vswitchs(options = {})
           action = 'DescribeVSwitches'
           sigNonce = randonStr
           time = Time.new.utc
@@ -13,9 +13,11 @@ module Fog
           parameters = defalutParameters(action, sigNonce, time)
           pathUrl = defaultAliyunUri(action, sigNonce, time)
 
+=begin
           parameters['VpcId'] = vpcid
           pathUrl += '&VpcId='
           pathUrl += vpcid
+=end
 
           pageNumber = options[:pageNumber]
           pageSize = options[:pageSize]
