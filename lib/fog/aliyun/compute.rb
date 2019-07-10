@@ -116,6 +116,8 @@ module Fog
       request :delete_disk
       request :attach_disk
       request :detach_disk
+      request :modify_disk
+      request :resize_disk
 
       class Mock
         attr_reader :auth_token
