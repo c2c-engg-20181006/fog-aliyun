@@ -10,20 +10,20 @@ module Fog
 
           _parameters = defalutParameters(_action, _sigNonce, _time)
           _pathURL = defaultAliyunUri(_action, _sigNonce, _time)
-          
+
           _ImageId = options[:imageId]
           if _ImageId
             _parameters['ImageId'] = _ImageId
             _pathURL += '&ImageId=' + _ImageId
           end
-          
+
           _InstanceType = options[:instanceType]
           if _InstanceType
             _parameters['InstanceType'] = _InstanceType
             _pathURL += '&InstanceType=' + _InstanceType
           end
 
-          _SecurityGroupId = options[:SecurityGroupId]
+          _SecurityGroupId = options[:SecurityGroupId][0]
           if _SecurityGroupId
             _parameters['SecurityGroupId'] = _SecurityGroupId
             _pathURL += '&SecurityGroupId=' + _SecurityGroupId
@@ -94,9 +94,9 @@ module Fog
           _pathURL += '&Signature=' + _signature
 
           request(
-            expects: [200, 203],
-            method: 'GET',
-            path: _pathURL
+              expects: [200, 203],
+              method: 'GET',
+              path: _pathURL
           )
         end
       end
@@ -113,41 +113,41 @@ module Fog
           end
 
           user_id =
-            if user
-              user.id
-            else
-              response =
-                identity.create_user(
-                  @openstack_username,
-                  'password',
-                  "#{@openstack_username}@example.com"
-                )
-              response.body['user']['id']
-            end
+              if user
+                user.id
+              else
+                response =
+                    identity.create_user(
+                        @openstack_username,
+                        'password',
+                        "#{@openstack_username}@example.com"
+                    )
+                response.body['user']['id']
+              end
 
           mock_data = {
-            'addresses'    => { 'Private' => [{ 'addr' => Fog::Mock.random_ip }] },
-            'flavor'       => { 'id' => flavor_ref, 'links' => [{ 'href' => 'http://nova1:8774/admin/flavors/1', 'rel' => 'bookmark' }] },
-            'id'           => server_id,
-            'image'        => { 'id' => image_ref, 'links' => [{ 'href' => "http://nova1:8774/admin/images/#{image_ref}", 'rel' => 'bookmark' }] },
-            'links'        => [{ 'href' => 'http://nova1:8774/v1.1/admin/servers/5', 'rel' => 'self' }, { 'href' => 'http://nova1:8774/admin/servers/5', 'rel' => 'bookmark' }],
-            'hostId'       => '123456789ABCDEF01234567890ABCDEF',
-            'metadata'     => options['metadata'] || {},
-            'name'         => name || "server_#{rand(999)}",
-            'accessIPv4'   => options['accessIPv4'] || '',
-            'accessIPv6'   => options['accessIPv6'] || '',
-            'progress'     => 0,
-            'status'       => 'BUILD',
-            'created'      => '2012-09-27T00:04:18Z',
-            'updated'      => '2012-09-27T00:04:27Z',
-            'user_id'      => user_id,
-            'config_drive' => options['config_drive'] || ''
+              'addresses'    => { 'Private' => [{ 'addr' => Fog::Mock.random_ip }] },
+              'flavor'       => { 'id' => flavor_ref, 'links' => [{ 'href' => 'http://nova1:8774/admin/flavors/1', 'rel' => 'bookmark' }] },
+              'id'           => server_id,
+              'image'        => { 'id' => image_ref, 'links' => [{ 'href' => "http://nova1:8774/admin/images/#{image_ref}", 'rel' => 'bookmark' }] },
+              'links'        => [{ 'href' => 'http://nova1:8774/v1.1/admin/servers/5', 'rel' => 'self' }, { 'href' => 'http://nova1:8774/admin/servers/5', 'rel' => 'bookmark' }],
+              'hostId'       => '123456789ABCDEF01234567890ABCDEF',
+              'metadata'     => options['metadata'] || {},
+              'name'         => name || "server_#{rand(999)}",
+              'accessIPv4'   => options['accessIPv4'] || '',
+              'accessIPv6'   => options['accessIPv6'] || '',
+              'progress'     => 0,
+              'status'       => 'BUILD',
+              'created'      => '2012-09-27T00:04:18Z',
+              'updated'      => '2012-09-27T00:04:27Z',
+              'user_id'      => user_id,
+              'config_drive' => options['config_drive'] || ''
           }
 
           if nics = options['nics']
             nics.each do |_nic|
               mock_data['addresses'].merge!(
-                'Public' => [{ 'addr' => Fog::Mock.random_ip }]
+                  'Public' => [{ 'addr' => Fog::Mock.random_ip }]
               )
             end
           end
@@ -157,9 +157,9 @@ module Fog
                             { 'reservation_id' => "r-#{Fog::Mock.random_numbers(6)}" }
                           else
                             {
-                              'adminPass'       => 'password',
-                              'id'              => server_id,
-                              'links'           => mock_data['links']
+                                'adminPass'       => 'password',
+                                'id'              => server_id,
+                                'links'           => mock_data['links']
                             }
                           end
 
