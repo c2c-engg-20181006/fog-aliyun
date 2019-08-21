@@ -119,6 +119,9 @@ module Fog
       request :modify_disk
       request :resize_disk
 
+      #network
+      request :list_network_interfaces
+
       class Mock
         attr_reader :auth_token
         attr_reader :auth_token_expiration
