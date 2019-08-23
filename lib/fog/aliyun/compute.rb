@@ -51,6 +51,7 @@ module Fog
       request :reboot_server
       request :start_server
       request :stop_server
+      request :resize_server
 
       # SnapShoot CRUD
       request :list_snapshots
