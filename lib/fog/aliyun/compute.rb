@@ -84,6 +84,7 @@ module Fog
       request :delete_security_group_egress_sg_rule
       request :join_security_group
       request :leave_security_group
+      request :modify_security_group
 
       # Zones
       request :list_zones
