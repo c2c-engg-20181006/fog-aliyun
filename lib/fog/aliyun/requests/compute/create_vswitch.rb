@@ -1,10 +1,9 @@
 # frozen_string_literal: true
-
 module Fog
   module Compute
     class Aliyun
       class Real
-        def create_vswitch(cidrBlock, options = {})
+        def create_vswitch(cidrBlock, vpcId, zoneId, options = {})
           # {Aliyun API Reference}[https://docs.aliyun.com/?spm=5176.100054.3.1.DGkmH7#/pub/ecs/open-api/vswitch&createvswitch]
           action = 'CreateVSwitch'
           sigNonce = randonStr
@@ -17,9 +16,17 @@ module Fog
           pathUrl += '&CidrBlock='
           pathUrl += URI.encode(cidrBlock, '/[^!*\'()\;?:@#&%=+$,{}[]<>`" ')
 
-          parameters['ZoneId'] = @aliyun_zone_id
+          parameters['VpcId'] = vpcId
+          pathUrl += '&VpcId='
+          pathUrl += vpcId
+
+          parameters['ZoneId'] = zoneId
           pathUrl += '&ZoneId='
-          pathUrl += @aliyun_zone_id
+          pathUrl += zoneId
+
+          parameters['RegionId'] = @aliyun_region_id
+          pathUrl += '&RegionId='
+          pathUrl += @aliyun_region_id
 
           name = options[:name]
           desc = options[:description]
@@ -41,9 +48,9 @@ module Fog
           pathUrl += signature
 
           request(
-            expects: [200, 203],
-            method: 'GET',
-            path: pathUrl
+              expects: [200, 203],
+              method: 'GET',
+              path: pathUrl
           )
         end
       end

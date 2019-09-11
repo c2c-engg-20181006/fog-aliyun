@@ -23,13 +23,15 @@ module Fog
             _pathURL += '&InstanceType=' + _InstanceType
           end
 
-          _SecurityGroupId = options[:SecurityGroupId][0]
-          if _SecurityGroupId
-            _parameters['SecurityGroupId'] = _SecurityGroupId
-            _pathURL += '&SecurityGroupId=' + _SecurityGroupId
+          if options[:SecurityGroupId]
+            _SecurityGroupId = options[:SecurityGroupId][0]
+            if _SecurityGroupId
+              _parameters['SecurityGroupId'] = _SecurityGroupId
+              _pathURL += '&SecurityGroupId=' + _SecurityGroupId
+            end
           end
 
-          _ZoneId = options[:ZoneId]
+          _ZoneId = options[:availability_zone]
           if _ZoneId
             _parameters['ZoneId'] = _ZoneId
             _pathURL += '&ZoneId=' + _ZoneId
@@ -102,7 +104,7 @@ module Fog
       end
 
       class Mock
-        def create_server(name, image_ref, flavor_ref, options = {})
+        def create_server(options = {})
           response = Excon::Response.new
           response.status = 202
 
