@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module Fog
   module Compute
     class Aliyun
@@ -26,7 +25,7 @@ module Fog
           if desc
             parameters['Description'] = desc
             pathUrl += '&Description='
-            pathUrl += desc
+            pathUrl += URI.encode(desc, '[A-Za-z0-9_  -'']$')
           end
 
           if vpcid

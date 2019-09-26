@@ -25,7 +25,7 @@ module Fog
           if desc
             parameters['Description'] = desc
             pathUrl += '&Description='
-            pathUrl += desc
+            pathUrl += URI.encode(desc, '[A-Za-z0-9_  -'']$')
           end
 
 		  signature = sign(@aliyun_accesskey_secret, parameters)

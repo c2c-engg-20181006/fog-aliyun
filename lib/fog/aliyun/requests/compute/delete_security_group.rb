@@ -1,11 +1,10 @@
 # frozen_string_literal: true
-
 module Fog
   module Compute
     class Aliyun
       class Real
+        # {Aliyun API Reference}[https://docs.aliyun.com/?spm=5176.100054.3.1.DGkmH7#/pub/ecs/open-api/securitygroup&deletesecuritygroup]
         def delete_security_group(security_group_id)
-          # {Aliyun API Reference}[https://docs.aliyun.com/?spm=5176.100054.3.1.DGkmH7#/pub/ecs/open-api/securitygroup&deletesecuritygroup]
           action = 'DeleteSecurityGroup'
           sigNonce = randonStr
           time = Time.new.utc
@@ -18,7 +17,7 @@ module Fog
             pathUrl += '&SecurityGroupId='
             pathUrl += security_group_id
           else
-            raise ArgumentError, 'Missing required securyti id '
+            raise ArgumentError, 'Missing required security group id'
           end
 
           signature = sign(@aliyun_accesskey_secret, parameters)

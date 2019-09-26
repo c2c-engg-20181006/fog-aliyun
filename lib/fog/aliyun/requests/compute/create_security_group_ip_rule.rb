@@ -1,11 +1,10 @@
 # frozen_string_literal: true
-
 module Fog
   module Compute
     class Aliyun
       class Real
         # {Aliyun API Reference}[https://docs.aliyun.com/?spm=5176.100054.3.1.DGkmH7#/pub/ecs/open-api/securitygroup&authorizesecuritygroup]
-        def create_security_group_ip_rule(securitygroup_id, sourceCidrIp, nicType, option = {})
+        def create_security_group_ip_rule(securitygroup_id, cidrIp, option = {})
           action = 'AuthorizeSecurityGroup'
           sigNonce = randonStr
           time = Time.new.utc
@@ -17,19 +16,24 @@ module Fog
           pathUrl += '&SecurityGroupId='
           pathUrl += securitygroup_id
 
-          parameters['SourceCidrIp'] = sourceCidrIp
+          #sourceCiderIp replace with cidrIp
+          parameters['SourceCidrIp'] = cidrIp
           pathUrl += '&SourceCidrIp='
-          pathUrl += URI.encode(sourceCidrIp, '/[^!*\'()\;?:@#&%=+$,{}[]<>`" ')
+          pathUrl += URI.encode(cidrIp, '/[^!*\'()\;?:@#&%=+$,{}[]<>`" ')
+
+          nicType = option[:nicType]
           nicType ||= 'intranet'
           parameters['NicType'] = nicType
           pathUrl += '&NicType='
           pathUrl += nicType
 
-          portRange = option[:portRange]
-          portRange ||= '-1/-1'
-          parameters['PortRange'] = portRange
+          port = option[:port]
+          endport =option[:endport]
+          port ||= '-1'
+          endport ||= '-1'
+          parameters['PortRange'] = port+'/'+endport
           pathUrl += '&PortRange='
-          pathUrl += URI.encode(portRange, '/[^!*\'()\;?:@#&%=+$,{}[]<>`" ')
+          pathUrl += URI.encode(port+'/'+endport, '/[^!*\'()\;?:@#&%=+$,{}[]<>`" ')
 
           protocol = option[:protocol]
           protocol ||= 'all'
@@ -54,9 +58,9 @@ module Fog
           pathUrl += signature
 
           request(
-            expects: [200, 203],
-            method: 'GET',
-            path: pathUrl
+              expects: [200, 203],
+              method: 'GET',
+              path: pathUrl
           )
         end
       end
