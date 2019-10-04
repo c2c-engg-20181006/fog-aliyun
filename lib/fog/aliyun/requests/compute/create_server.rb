@@ -43,6 +43,13 @@ module Fog
             _pathURL += '&InstanceName=' + _InstanceName
           end
 
+          #keypair added
+          _KeyPairName = options[:keyPairName]
+          if _KeyPairName
+            _parameters['KeyPairName'] = _KeyPairName
+            _pathURL += '&KeyPairName=' + _KeyPairName
+          end
+
           _Description = options[:Description]
           if _Description
             _parameters['Description'] = _Description

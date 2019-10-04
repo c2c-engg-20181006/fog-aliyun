@@ -124,6 +124,12 @@ module Fog
       #network
       request :list_network_interfaces
 
+      #keypairs
+      request :list_keypairs
+
+      #Web management terminal(for accessing vnc console)
+      request :instance_vnc_url
+
       class Mock
         attr_reader :auth_token
         attr_reader :auth_token_expiration
