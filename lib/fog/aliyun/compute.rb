@@ -67,6 +67,7 @@ module Fog
       request :list_eip_addresses
       request :allocate_eip_address
       request :release_eip_address
+      request :modify_eip_address
       request :associate_eip_address
       request :unassociate_eip_address
 

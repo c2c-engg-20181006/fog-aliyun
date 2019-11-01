@@ -15,12 +15,10 @@ module Fog
         #     * 'RequestId'<~String> - Id of the request
         #
         # {Aliyun API Reference}[https://docs.aliyun.com/?spm=5176.100054.201.106.DGkmH7#/pub/ecs/open-api/network&associateeipaddresss]
-        def unassociate_eip_address(server_id, allocationId, options = {})
+        def unassociate_eip_address(server_id, allocationId)
           _action = 'UnassociateEipAddress'
           _sigNonce = randonStr
           _time = Time.new.utc
-
-          type = options['instance_type']
 
           _parameters = defalutParameters(_action, _sigNonce, _time)
           _pathURL = defaultAliyunUri(_action, _sigNonce, _time)
@@ -30,11 +28,6 @@ module Fog
 
           _parameters['AllocationId'] = allocationId
           _pathURL += '&AllocationId=' + allocationId
-
-          if type
-            _parameters['InstanceType'] = type
-            _pathURL += 'InstanceType=' + type
-          end
 
           _signature = sign(@aliyun_accesskey_secret, _parameters)
           _pathURL += '&Signature=' + _signature
